@@ -38,10 +38,10 @@ public class Main {
                     atualizarCliente();
                     break;
                 case 4:
-
+                    cadastrarProduto();
                     break;
                 case 5:
-
+                    listarProdutos();
                     break;
                 case 6:
 
@@ -95,4 +95,20 @@ public class Main {
             System.out.println("Cliente com CPF " + cpf + " não encontrado");
         }
     }
+
+    private static void cadastrarProduto() {
+        System.out.println("Nome do produto: ");
+        String nome = scanner.nextLine();
+        System.out.println("Preço: ");
+        double preco = scanner.nextDouble();
+        Produto produto = new Produto(ProdutoRepository.listar().size() + 1, nome, preco);
+        ProdutoRepository.adicionar(produto);
+        System.out.println("Produto cadastrado!");
+    }
+
+    private static void listarProdutos() {
+        for (Produto p : ProdutoRepository.listar()){
+            System.out.println(p.toString());
+    }
+}
 }
