@@ -11,4 +11,23 @@ public class ProdutoRepository {
     public static List<Produto> listar(){
         return produtos;
     }
+
+    public static void atualizarProduto(int id, Produto produtoAtualizado) {
+        for (int i = 0; i < produtos.size(); i++) {
+            if (produtos.get(i).getId()==id) {
+                produtos.set(i, produtoAtualizado);
+                return;
+            }
+        }
+    }
+
+    public static Produto buscarPorId(int id) {
+        for(Produto p:produtos){
+            if(p.getId()==id){
+                return p;
+            }
+
+        }
+        return null;
+    }
 }

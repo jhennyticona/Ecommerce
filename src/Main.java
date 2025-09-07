@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -44,7 +45,7 @@ public class Main {
                     listarProdutos();
                     break;
                 case 6:
-
+                    atualizarProduto();
                     break;
                 case 7:
 
@@ -107,8 +108,27 @@ public class Main {
     }
 
     private static void listarProdutos() {
-        for (Produto p : ProdutoRepository.listar()){
+        for (Produto p : ProdutoRepository.listar()) {
             System.out.println(p.toString());
+        }
     }
-}
+
+    private static void atualizarProduto() {
+        listarProdutos();
+        System.out.println("Digite o ID do produto para atualizar");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        Produto produtoAtualizar = ProdutoRepository.buscarPorId(id);
+        if (produtoAtualizar != null) {
+            System.out.println("Nome: ");
+            String novoNome = scanner.nextLine();
+            System.out.println("Preço: ");
+            double novoPreco = scanner.nextDouble();
+            Produto produtoAtualizado = new Produto(id, novoNome, novoPreco);
+            ProdutoRepository.atualizarProduto(id, produtoAtualizado);
+            System.out.println("Produto atualizado com sucesso!");
+        } else {
+            System.out.println("Produto com ID  " + id + " não encontrado");
+        }
+    }
 }
