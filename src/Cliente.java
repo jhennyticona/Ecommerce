@@ -5,7 +5,7 @@ public class Cliente {
 
     public Cliente(String cpf, String nome, String celular) {
         this.cpf = cpf;
-        nome = nome;
+        this.nome = nome;
         this.celular = celular;
     }
 
@@ -19,5 +19,12 @@ public class Cliente {
 
     public String getCelular() {
         return celular;
+    }
+
+    @Override
+    public String toString() {
+        return "cpf='" + cpf + '\'' +
+                ", nome='" + nome + '\'' +
+                ", celular='" + celular + '\'';
     }
 }
