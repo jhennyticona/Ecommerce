@@ -1,0 +1,3 @@
+public enum Status {
+    ABERTO,AGUARDANDO_PAGAMENTO,PAGO,FINALIZADO
+}
