@@ -48,7 +48,7 @@ public class Main {
                     atualizarProduto();
                     break;
                 case 7:
-
+                    criarPedido();
                     break;
                 case 8:
                     System.out.println("Saindo do sistema...");
@@ -68,7 +68,9 @@ public class Main {
         String cpf = scanner.nextLine();
         System.out.println("Celular: ");
         String celular = scanner.nextLine();
-        Cliente cliente = new Cliente(cpf, nome, celular);
+        System.out.println("Email: ");
+        String email=scanner.nextLine();
+        Cliente cliente = new Cliente(cpf, nome, celular,email);
         ClienteRepository.adicionar(cliente);
         System.out.println("Cliente cadastrado com sucesso!");
     }
@@ -89,7 +91,9 @@ public class Main {
             String novoNome = scanner.nextLine();
             System.out.println("Celular: ");
             String novoCelular = scanner.nextLine();
-            Cliente clienteAtualizado = new Cliente(clienteAtualizar.getCpf(), novoNome, novoCelular);
+            System.out.println("Email: ");
+            String novoEmail=scanner.nextLine();
+            Cliente clienteAtualizado = new Cliente(clienteAtualizar.getCpf(), novoNome, novoCelular,novoEmail);
             ClienteRepository.atualizarCliente(cpf, clienteAtualizado);
             System.out.println("Cliente atualizado com sucesso!");
         } else {
@@ -129,6 +133,70 @@ public class Main {
             System.out.println("Produto atualizado com sucesso!");
         } else {
             System.out.println("Produto com ID  " + id + " não encontrado");
+        }
+    }
+
+    private static void criarPedido() {
+        listarCliente();
+        System.out.println("Digite CPF do Cliente: ");
+        String cpfCliente = scanner.nextLine();
+        Cliente cliente = ClienteRepository.buscarPorCPF(cpfCliente);
+        if (cliente == null) {
+            System.out.println("Cliente não encontrado!");
+            return;
+        }
+        Pedido pedido = new Pedido(PedidoRepository.listar().size() + 1, cliente);
+        boolean opcao = true;
+        while (opcao) {
+            System.out.println("\n1 - Adicionar item");
+            System.out.println("2 - Remover item");
+            System.out.println("3 - Finalizar pedido");
+            System.out.println("4 - Listar pedido");
+            System.out.println("5 - Pagar pedido");
+            System.out.println("6 - Entregar pedido");
+            System.out.println("7 - Sair da venda");
+            int opc = scanner.nextInt();
+            scanner.nextLine();
+            switch (opc) {
+                case 1 -> {
+                    listarProdutos();
+                    System.out.print("ID do produto: ");
+                    int idProd = scanner.nextInt();
+                    System.out.print("Quantidade: ");
+                    int qtd = scanner.nextInt();
+                    System.out.print("Valor de venda: ");
+                    double valorVenda = scanner.nextDouble();
+                    scanner.nextLine();
+                    Produto prod = ProdutoRepository.buscarPorId(idProd);
+                    if (prod != null) {
+                        pedido.adicionarItem(new ItemPedido(prod, qtd, valorVenda));
+                        System.out.println("Item adicionado!");
+                    }
+                }
+                case 2 -> {
+                    listarItens(pedido);
+                    System.out.print("Índice do item para remover: ");
+                    int idx = scanner.nextInt();
+                    pedido.removerItem(idx);
+                }
+                case 3 -> pedido.finalizarPedido();
+                case 4 -> pedido.listarPedido();
+                case 5 -> pedido.pagar();
+                case 6 -> pedido.entregar();
+                case 7 -> opcao = false;
+            }
+        }
+        PedidoRepository.adicionar(pedido);
+    }
+
+    private static void listarItens(Pedido pedido) {
+        List<ItemPedido> itens=pedido.getItens();
+        if(itens.isEmpty()){
+            System.out.println("Nenhum item adicionado ao pedido");
+            return;
+        }
+        for(int i=0;i<itens.size();i++){
+            System.out.println(i+" - "+itens.get(i));
         }
     }
 }
